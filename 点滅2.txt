@@ -1,0 +1,59 @@
+;
+;   LED点滅プログラム
+;   電気電子システム工学基礎実験
+
+INCLUDE "P16F84A.INC"
+LIST    P=PIC16F84A
+
+CNTT500 EQU 0CH
+CNTT100 EQU 0DH
+CNTT04  EQU 0EH
+
+        ORG 0
+
+        BSF STATUS,RP0
+        CLRF    TRISB
+        BCF STATUS, RP0
+
+MAINLP
+        MOVLW   06H
+        MOVWF   PORTB
+        CALL    T500
+
+        MOVLW   00H
+        MOVWF   PORTB
+        CALL    T500
+
+        GOTO    MAINLP
+
+T500
+        MOVLW   05H
+        MOVWF   CNTT500
+T500LP
+        CALL    T100
+        DECFSZ  CNTT500, F
+        GOTO    T500LP
+        RETURN
+
+T100
+        MOVLW   0F9H
+        MOVWF   CNTT100
+T100LP
+        CALL    T04
+        DECFSZ  CNTT100,F
+        GOTO    T100LP
+        RETURN
+
+T04
+        MOVLW   0F9H
+        MOVWF   CNTT04
+T04LP
+        NOP
+        DECFSZ  CNTT04, F
+        GOTO    T04LP
+        RETURN
+
+        END
+
+
+
